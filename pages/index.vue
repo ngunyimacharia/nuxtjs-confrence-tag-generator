@@ -1,6 +1,6 @@
 <template>
   <div class="w-full min-h-screen dark-soul-blue text-white">
-    <div class="grid grid-cols-2 gap-6 w-2/3 mx-auto">
+    <div class="md:grid grid-cols-2 gap-6 md:w-2/3 m-0 md:mx-auto">
       <div id="badge" class="relative">
         <img
           src="https://jamstackconf.com/badge/img/blue-badge-bg-2.png"
