@@ -156,6 +156,7 @@
 
           <div class="text-center">
             <button
+              :disabled="uploading"
               class="
                 laminate
                 hover-pink-katydid
@@ -171,7 +172,7 @@
               "
               @click="submit"
             >
-              Laminate!
+              {{ uploading ? "Laminating..." : "Laminate!" }}
             </button>
           </div>
         </div>
