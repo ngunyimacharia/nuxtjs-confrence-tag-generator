@@ -7,16 +7,16 @@
           class="absolute w-full"
         />
         <div id="then" class="absolute">
-          <img src="/wadi-lissa-4U1x6459Q-s-unsplash.jpg" />
+          <img v-if="thenUrl" :src="thenUrl" />
         </div>
         <div id="now" class="absolute">
-          <img src="/james-timothy-m8uLhKTiL8Y-unsplash.jpg" />
+          <img v-if="nowUrl" :src="nowUrl" />
         </div>
         <h1
           id="name"
           class="text-4xl font-bold text-shadow text-center leading-12 absolute"
         >
-          An Excited Jamstacker
+          {{ name ? name : "An Excited Jamstacker" }}
         </h1>
       </div>
       <div class="pt-10">
@@ -85,13 +85,20 @@
                 shadow
               "
               placeholder="Enter your full name"
+              v-model="name"
             />
           </div>
 
           <div class="my-10 grid grid-cols-2 text-center">
             <div>
-              <input type="file" class="hidden" />
+              <input
+                type="file"
+                class="hidden"
+                ref="thenInput"
+                @change="setThen"
+              />
               <label
+                @click="$refs.thenInput.click()"
                 class="
                   block
                   w-16
@@ -112,8 +119,14 @@
               <p class="m-3 uppercase">How it started</p>
             </div>
             <div>
-              <input type="file" class="hidden" />
+              <input
+                type="file"
+                class="hidden"
+                ref="nowInput"
+                @change="setNow"
+              />
               <label
+                @click="$refs.nowInput.click()"
                 class="
                   block
                   w-16
@@ -167,7 +180,27 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      name: null,
+      thenFile: null,
+      thenUrl: null,
+      nowFile: null,
+      nowUrl: null,
+    };
+  },
+  methods: {
+    setThen(e) {
+      this.thenFile = e.target.files[0];
+      this.thenUrl = URL.createObjectURL(this.thenFile);
+    },
+    setNow(e) {
+      this.nowFile = e.target.files[0];
+      this.nowUrl = URL.createObjectURL(this.nowFile);
+    },
+  },
+};
 </script>
 
 <style scoped>
