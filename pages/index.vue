@@ -221,19 +221,27 @@ export default {
 
       this.then.cloudinary = await this.$cloudinary.upload(thenData, {
         upload_preset: "default-preset",
-        folder: "nuxtjs-audio-track-change",
+        folder: "nuxtjs-confrence-tag-generator",
       });
 
       const nowData = await this.readData(this.now.file);
 
       this.now.cloudinary = await this.$cloudinary.upload(nowData, {
         upload_preset: "default-preset",
-        folder: "nuxtjs-audio-track-change",
+        folder: "nuxtjs-confrence-tag-generator",
       });
 
-      console.log(this.then, this.now);
-
       this.uploading = false;
+
+      const url =
+        "/tag?name=" +
+        this.name +
+        "&then=" +
+        this.then.cloudinary.public_id +
+        "&now=" +
+        this.now.cloudinary.public_id;
+
+      this.$router.push(url);
     },
   },
 };
