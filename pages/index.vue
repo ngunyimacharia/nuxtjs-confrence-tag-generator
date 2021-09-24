@@ -7,10 +7,10 @@
           class="absolute w-full"
         />
         <div id="then" class="absolute">
-          <img v-if="thenUrl" :src="thenUrl" />
+          <img v-if="then.url" :src="then.url" />
         </div>
         <div id="now" class="absolute">
-          <img v-if="nowUrl" :src="nowUrl" />
+          <img v-if="now.url" :src="now.url" />
         </div>
         <h1
           id="name"
@@ -169,6 +169,7 @@
                 mx-auto
                 my-10
               "
+              @click="submit"
             >
               Laminate!
             </button>
@@ -184,20 +185,55 @@ export default {
   data() {
     return {
       name: null,
-      thenFile: null,
-      thenUrl: null,
-      nowFile: null,
-      nowUrl: null,
+      then: {
+        file: null,
+        url: null,
+        cloudinary: null,
+      },
+      now: {
+        file: null,
+        url: null,
+        cloudinary: null,
+      },
+      uploading: false,
     };
   },
   methods: {
     setThen(e) {
-      this.thenFile = e.target.files[0];
-      this.thenUrl = URL.createObjectURL(this.thenFile);
+      this.then.file = e.target.files[0];
+      this.then.url = URL.createObjectURL(this.then.file);
     },
     setNow(e) {
-      this.nowFile = e.target.files[0];
-      this.nowUrl = URL.createObjectURL(this.nowFile);
+      this.now.file = e.target.files[0];
+      this.now.url = URL.createObjectURL(this.now.file);
+    },
+    async readData(f) {
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onloadend = () => resolve(reader.result);
+        reader.readAsDataURL(f);
+      });
+    },
+    async submit() {
+      this.uploading = true;
+
+      const thenData = await this.readData(this.then.file);
+
+      this.then.cloudinary = await this.$cloudinary.upload(thenData, {
+        upload_preset: "default-preset",
+        folder: "nuxtjs-audio-track-change",
+      });
+
+      const nowData = await this.readData(this.now.file);
+
+      this.now.cloudinary = await this.$cloudinary.upload(nowData, {
+        upload_preset: "default-preset",
+        folder: "nuxtjs-audio-track-change",
+      });
+
+      console.log(this.then, this.now);
+
+      this.uploading = false;
     },
   },
 };
